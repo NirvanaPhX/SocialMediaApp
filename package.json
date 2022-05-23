@@ -11,6 +11,7 @@
   "author": "Li",
   "license": "MIT",
   "dependencies": {
+    "config": "^3.3.7",
     "express": "^4.18.1",
     "mongoose": "^6.3.4"
   },
