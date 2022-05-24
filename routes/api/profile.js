@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const auth = require("../../middleware/auth");
 
 const Profile = require("../../models/Profile");
+const { route } = require("./users");
 
 // @route /api/profile/me
 // @desc Get logged in user profile
@@ -63,7 +64,7 @@ router.post(
     profileFields.user = req.user.id;
 
     if (company) {
-      profileFields.company = comapny;
+      profileFields.company = company;
     }
     if (website) {
       profileFields.website = website;
@@ -103,7 +104,7 @@ router.post(
     }
 
     try {
-      let profile = Profile.findOne({ user: req.user.id });
+      let profile = await Profile.findOne({ user: req.user.id });
 
       // Update profile if it exists
       if (profile) {
@@ -119,7 +120,7 @@ router.post(
       // Create new profile it doesn't exist
       profile = new Profile(profileFields);
 
-      await Profile.save();
+      await profile.save();
       res.json(profile);
     } catch (err) {
       console.error(err.message);
@@ -127,5 +128,64 @@ router.post(
     }
   }
 );
+
+// @route GET /api/profile
+// @desc Get all the profiles
+// @access Public
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find({}).populate("user", [
+      "name",
+      "avatar",
+    ]);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route GET /api/profile/user/:user_id
+// @desc Get profile by user ID
+// @access Public
+router.get("/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+
+  try {
+    const profile = await Profile.findOne({ user: user_id }).populate("user", [
+      "name",
+      "avatar",
+    ]);
+
+    if (!profile) {
+      return res.status(400).send({ msg: "User profile does not exist" });
+    }
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    // Show same error message if object Id is incorrect
+    if ((err.kind = "ObjectId")) {
+      return res.status(400).send({ msg: "User profile does not exist" });
+    }
+
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route DELETE /api/profile
+// @desc Delete profile, user & posts
+// @access Private
+router.delete("/", auth, async (req, res) => {
+  try {
+    await Profile.findOneAndRemove({ user: req.user.id });
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: "User Deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;
