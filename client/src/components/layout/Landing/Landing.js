@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Landing.css";
 
 export const Landing = () => {
@@ -7,16 +8,16 @@ export const Landing = () => {
         <div className="landing-inner">
           <h1 className="x-large">Developer Connector</h1>
           <p className="lead">
-            Create a dveloper profile/portfolio, share posts and get help from
-            other developers
+            Create Link dveloper profile/portfolio, share posts and get help
+            from other developers
           </p>
           <div className="buttons">
-            <a href="" className="btn btn-primary">
+            <Link to="/register" className="btn btn-primary">
               Sign Up
-            </a>
-            <a href="" className="btn btn-light">
+            </Link>
+            <Link to="/login" className="btn btn-light">
               Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>

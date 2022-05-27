@@ -15,6 +15,10 @@ body {
   color: #333;
 }
 
+a {
+  color: var(--primary-color)
+}
+
 img {
   width: 100%;
 }
