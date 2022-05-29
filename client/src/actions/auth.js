@@ -1,6 +1,12 @@
 import axios from "axios";
-import { REGISTER_SUCCESS, REGISTER_FAILURE } from "./types";
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
+  USER_LOADED,
+  AUTH_ERROR,
+} from "./types";
 import { setAlert } from "./alert";
+import setAuthToken from "../utils/setAuthToken";
 
 export const register =
   ({ name, email, password }) =>
@@ -34,3 +40,23 @@ export const register =
       dispatch({ type: REGISTER_FAILURE });
     }
   };
+
+export const loadUser = () => async (dispatch) => {
+  const { token } = localStorage;
+
+  // Set axios header attribute 'x-auth-token' to existing token
+  token && setAuthToken(token);
+
+  try {
+    const res = await axios.get("/api/auth");
+
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR,
+    });
+  }
+};
