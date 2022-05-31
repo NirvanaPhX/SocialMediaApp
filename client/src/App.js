@@ -5,7 +5,7 @@ import store from "./store";
 
 import "./reset.css";
 import "./App.css";
-import { Navbar } from "./components/layout/Navbar/Navbar";
+import Navbar from "./components/layout/Navbar/Navbar";
 import { Landing } from "./components/layout/Landing/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";

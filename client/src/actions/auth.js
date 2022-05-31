@@ -5,6 +5,7 @@ import {
   AUTH_ERROR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
 } from "./types";
 import { setAlert } from "./alert";
 import api from "../utils/api";
@@ -44,8 +45,6 @@ export const loadUser = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
-    console.log(err);
-
     dispatch({
       type: AUTH_ERROR,
     });
@@ -80,3 +79,7 @@ export const login =
       });
     }
   };
+
+export const logout = () => (dispatch) => {
+  dispatch({ type: LOGOUT });
+};
