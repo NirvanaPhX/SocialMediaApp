@@ -1,35 +1,29 @@
-import axios from "axios";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
   USER_LOADED,
   AUTH_ERROR,
+  LOGIN_FAIL,
+  LOGIN_SUCCESS,
 } from "./types";
 import { setAlert } from "./alert";
-import setAuthToken from "../utils/setAuthToken";
+import api from "../utils/api";
 
 export const register =
   ({ name, email, password }) =>
   async (dispatch) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const body = JSON.stringify({
+    const body = {
       name,
       email,
       password,
-    });
-
-    console.log(body);
+    };
 
     try {
-      const res = await axios.post("/api/users", body, config);
-      const token = res.data;
+      const res = await api.post("/users", body);
 
-      dispatch({ type: REGISTER_SUCCESS, payload: token });
+      dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+
+      dispatch(loadUser());
     } catch (err) {
       const errors = err.response.data.errors;
 
@@ -42,21 +36,47 @@ export const register =
   };
 
 export const loadUser = () => async (dispatch) => {
-  const { token } = localStorage;
-
-  // Set axios header attribute 'x-auth-token' to existing token
-  token && setAuthToken(token);
-
   try {
-    const res = await axios.get("/api/auth");
+    const res = await api.get("/auth");
 
     dispatch({
       type: USER_LOADED,
       payload: res.data,
     });
   } catch (err) {
+    console.log(err);
+
     dispatch({
       type: AUTH_ERROR,
     });
   }
 };
+
+export const login =
+  ({ email, password }) =>
+  async (dispatch) => {
+    const body = {
+      email,
+      password,
+    };
+
+    try {
+      const res = await api.post("/auth", body);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+
+      dispatch(loadUser());
+    } catch (err) {
+      const errors = err.response.data.errors;
+
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
+      dispatch({
+        type: LOGIN_FAIL,
+      });
+    }
+  };
