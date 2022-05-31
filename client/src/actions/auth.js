@@ -6,6 +6,7 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT,
+  CLEAR_PROIFLE,
 } from "./types";
 import { setAlert } from "./alert";
 import api from "../utils/api";
@@ -81,5 +82,6 @@ export const login =
   };
 
 export const logout = () => (dispatch) => {
+  dispatch({ type: CLEAR_PROIFLE });
   dispatch({ type: LOGOUT });
 };
