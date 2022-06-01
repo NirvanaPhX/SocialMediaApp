@@ -1,4 +1,9 @@
-import { CLEAR_PROIFLE, GET_PROFILE, PROFILE_ERROR } from "../actions/types";
+import {
+  CLEAR_PROIFLE,
+  GET_PROFILE,
+  PROFILE_CREATED,
+  PROFILE_ERROR,
+} from "../actions/types";
 
 const initialState = {
   profile: null,
@@ -13,6 +18,7 @@ export default function profileReducer(state = initialState, action) {
 
   switch (type) {
     case GET_PROFILE:
+    case PROFILE_CREATED:
       return {
         ...state,
         profile: payload,
