@@ -1,26 +1,34 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useMatch } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { createProfile } from "../../actions/profile";
+import { createProfile, getCurrentProfile } from "../../actions/profile";
 
-const CreateProfile = ({ createProfile }) => {
+const initialState = {
+  company: "",
+  website: "",
+  location: "",
+  status: "",
+  skills: "",
+  githubusername: "",
+  bio: "",
+  twitter: "",
+  facebook: "",
+  linkedin: "",
+  youtube: "",
+  instagram: "",
+};
+
+const EditProfile = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentProfile,
+}) => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    company: "",
-    website: "",
-    location: "",
-    status: "",
-    skills: "",
-    githubusername: "",
-    bio: "",
-    twitter: "",
-    facebook: "",
-    linkedin: "",
-    youtube: "",
-    instagram: "",
-  });
+  const creatingProfile = useMatch("/create-profile");
+
+  const [formData, setFormData] = useState(initialState);
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
 
@@ -39,21 +47,46 @@ const CreateProfile = ({ createProfile }) => {
     instagram,
   } = formData;
 
+  useEffect(() => {
+    if (!profile) getCurrentProfile();
+
+    if (!loading && profile) {
+      const profileData = { ...initialState };
+      for (const key in profile) {
+        if (key in profileData) profileData[key] = profile[key];
+      }
+
+      for (const key in profile.social) {
+        if (key in profileData) profileData[key] = profile.social[key];
+      }
+
+      if (Array.isArray(profileData.skills)) {
+        profileData.skills = profileData.skills.join(", ");
+      }
+
+      setFormData(profileData);
+    }
+  }, [loading, getCurrentProfile, profile]);
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    createProfile(formData, navigate);
+    createProfile(formData, navigate, creatingProfile ? true : false);
   };
 
   return (
     <section className="container">
-      <h1 className="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">
+        {creatingProfile ? "Create" : "Edit"} Your Profile
+      </h1>
       <p className="lead">
         <i className="fas fa-user"></i>
-        Let's get some information to make your profile stand out
+        {creatingProfile
+          ? ` Let's get some information to make your profile stand out `
+          : "Add some changes to your profile"}
       </p>
       <small>* = required field</small>
       <form className="form" onSubmit={onSubmit}>
@@ -223,8 +256,16 @@ const CreateProfile = ({ createProfile }) => {
   );
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-export default connect(null, { createProfile })(CreateProfile);
+const mapStateToProps = (state) => ({
+  profile: state.profileReducer,
+});
+
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  EditProfile
+);
