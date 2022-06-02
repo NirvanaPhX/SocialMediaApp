@@ -4,6 +4,8 @@ import {
   PROFILE_CREATED,
   PROFILE_ERROR,
   UPDATE_PROFILE,
+  ACCOUNT_DELETED,
+  CLEAR_PROIFLE,
 } from "./types";
 import { setAlert } from "../actions/alert";
 
@@ -20,7 +22,7 @@ export const getCurrentProfile = () => async (dispatch) => {
   }
 };
 
-// Create user profile
+// Create/Edit user profile
 export const createProfile =
   (formData, navigate, edit = false) =>
   async (dispatch) => {
@@ -94,6 +96,63 @@ export const addEducation = (formData, navigate) => async (dispatch) => {
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Delete Experience
+export const deleteExperience = (exp_id) => async (dispatch) => {
+  try {
+    const resp = await api.delete(`/profile/experience/${exp_id}`);
+
+    dispatch({ type: UPDATE_PROFILE, payload: resp.data });
+
+    dispatch(setAlert("Experience has been deleted successfully", "success"));
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.resposne.status,
+      },
+    });
+  }
+};
+
+// Delete Education
+export const deleteEducation = (edu_id) => async (dispatch) => {
+  try {
+    const resp = await api.delete(`/profile/education/${edu_id}`);
+
+    dispatch({ type: UPDATE_PROFILE, payload: resp.data });
+
+    dispatch(setAlert("Education has been deleted successfully", "success"));
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};
+
+// Delete Profile
+export const deleteProfile = () => async (dispatch) => {
+  try {
+    const resp = await api.delete("/profile");
+
+    dispatch({ type: ACCOUNT_DELETED });
+    dispatch({ type: CLEAR_PROIFLE });
+    dispatch(setAlert("Account has been deleted", "danger"));
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
     });
   }
 };
