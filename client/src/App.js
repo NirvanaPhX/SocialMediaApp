@@ -16,6 +16,8 @@ import setAuthToken from "./utils/setAuthToken";
 
 import "./reset.css";
 import "./App.css";
+import AddExperience from "./components/profile-form/AddExperience";
+import AddEducation from "./components/profile-form/AddEducation";
 
 const App = () => {
   // When the App runs the first time check localStorage for token
@@ -47,6 +49,14 @@ const App = () => {
           <Route
             path="edit-profile"
             element={<PrivateRoute component={ProfileForm} />}
+          />
+          <Route
+            path="add-experience"
+            element={<PrivateRoute component={AddExperience} />}
+          />
+          <Route
+            path="add-education"
+            element={<PrivateRoute component={AddEducation} />}
           />
         </Routes>
       </Router>

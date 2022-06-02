@@ -3,6 +3,7 @@ import {
   GET_PROFILE,
   PROFILE_CREATED,
   PROFILE_ERROR,
+  UPDATE_PROFILE,
 } from "../actions/types";
 
 const initialState = {
@@ -19,6 +20,7 @@ export default function profileReducer(state = initialState, action) {
   switch (type) {
     case GET_PROFILE:
     case PROFILE_CREATED:
+    case UPDATE_PROFILE:
       return {
         ...state,
         profile: payload,
