@@ -10,7 +10,7 @@ const initialState = {
   fieldofstudy: "",
   from: "",
   to: "",
-  current: "",
+  current: false,
   description: "",
 };
 
