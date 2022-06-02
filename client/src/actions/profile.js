@@ -57,6 +57,8 @@ export const addExperience = (formData, navigate) => async (dispatch) => {
 
     dispatch({ type: UPDATE_PROFILE, payload: resp.data });
 
+    dispatch(setAlert("Experience successfully added", "success"));
+
     navigate("/dashboard");
   } catch (err) {
     const errors = err.response.data.errors;
@@ -78,6 +80,8 @@ export const addEducation = (formData, navigate) => async (dispatch) => {
     const resp = await api.put("/profile/education", formData);
 
     dispatch({ type: UPDATE_PROFILE, payload: resp.data });
+
+    dispatch(setAlert("Education successfully added", "success"));
 
     navigate("/dashboard");
   } catch (err) {
