@@ -197,7 +197,7 @@ export const deleteEducation = (edu_id) => async (dispatch) => {
 // Delete Profile
 export const deleteProfile = () => async (dispatch) => {
   try {
-    const resp = await api.delete("/profile");
+    await api.delete("/profile");
 
     dispatch({ type: ACCOUNT_DELETED });
     dispatch({ type: CLEAR_PROIFLE });
