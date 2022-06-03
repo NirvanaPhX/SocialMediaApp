@@ -6,9 +6,12 @@ import {
   UPDATE_PROFILE,
   ACCOUNT_DELETED,
   CLEAR_PROIFLE,
+  GET_PROFILES,
+  GET_GH_REPOS,
 } from "./types";
 import { setAlert } from "../actions/alert";
 
+// Get current user profile
 export const getCurrentProfile = () => async (dispatch) => {
   try {
     const resp = await api.get("/profile/me");
@@ -51,6 +54,59 @@ export const createProfile =
       });
     }
   };
+
+// Get all profiles
+export const getAllProfiles = () => async (dispatch) => {
+  dispatch({ type: CLEAR_PROIFLE });
+
+  try {
+    const resp = await api.get("/profile");
+
+    dispatch({ type: GET_PROFILES, payload: resp.data });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.resposne.status,
+      },
+    });
+  }
+};
+
+// Get profile by ID
+export const getProfileByUserId = (user_id) => async (dispatch) => {
+  try {
+    const resp = await api.get(`/profile/${user_id}`);
+
+    dispatch({ type: GET_PROFILES, payload: resp.data });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};
+
+// Get Github repos
+export const getGithubRepos = (username) => async (dispatch) => {
+  try {
+    const resp = await api.get(`/profile/github/${username}`);
+
+    dispatch({ type: GET_GH_REPOS, payload: resp.data });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};
 
 // Add Experience
 export const addExperience = (formData, navigate) => async (dispatch) => {

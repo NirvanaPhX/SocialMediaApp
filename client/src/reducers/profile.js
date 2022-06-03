@@ -1,9 +1,12 @@
 import {
   CLEAR_PROIFLE,
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_CREATED,
   PROFILE_ERROR,
   UPDATE_PROFILE,
+  UPDATE_PROFILES,
+  GET_GH_REPOS,
 } from "../actions/types";
 
 const initialState = {
@@ -38,6 +41,19 @@ export default function profileReducer(state = initialState, action) {
         loading: false,
         profile: null,
         repos: [],
+      };
+    case UPDATE_PROFILES:
+    case GET_PROFILES:
+      return {
+        ...state,
+        loading: false,
+        profiles: payload,
+      };
+    case GET_GH_REPOS:
+      return {
+        ...state,
+        loading: false,
+        repos: payload,
       };
     default:
       return state;
