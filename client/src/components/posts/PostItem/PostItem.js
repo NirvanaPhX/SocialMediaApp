@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import formatDate from "../../../utils/formatDate";
 import { connect } from "react-redux";
-import { likePost, unlikePost } from "../../../actions/post";
+import { likePost, unlikePost, deletePost } from "../../../actions/post";
 
 import "./PostItem.css";
 
@@ -12,6 +12,7 @@ const PostItem = ({
   post: { _id, text, name, avatar, user, likes, comments, date },
   likePost,
   unlikePost,
+  deletePost,
   showActions,
 }) => {
   return (
@@ -49,8 +50,14 @@ const PostItem = ({
                 <span className="comment-count">{comments.length}</span>
               )}
             </Link>
+
+            {/* Only show delete button if the logged in user is the owner of the post */}
             {!auth.loading && user === auth.user._id && (
-              <button type="button" className="btn btn-danger">
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => deletePost(_id)}
+              >
                 <i className="fas fa-times" />
               </button>
             )}
@@ -66,13 +73,17 @@ PostItem.defaultProps = {
 };
 
 PostItem.propTypes = {
+  auth: PropTypes.object.isRequired,
   post: PropTypes.object.isRequired,
   likePost: PropTypes.func.isRequired,
   unlikePost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
 });
 
-export default connect(mapStateToProps, { likePost, unlikePost })(PostItem);
+export default connect(mapStateToProps, { likePost, unlikePost, deletePost })(
+  PostItem
+);
