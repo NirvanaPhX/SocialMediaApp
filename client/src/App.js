@@ -20,6 +20,7 @@ import AddExperience from "./components/profile-form/AddExperience";
 import AddEducation from "./components/profile-form/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
+import Posts from "./components/posts/Posts";
 
 const App = () => {
   // When the App runs the first time check localStorage for token
@@ -62,6 +63,7 @@ const App = () => {
             path="add-education"
             element={<PrivateRoute component={AddEducation} />}
           />
+          <Route path="posts" element={<PrivateRoute component={Posts} />} />
         </Routes>
       </Router>
     </Provider>

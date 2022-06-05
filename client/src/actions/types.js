@@ -20,3 +20,7 @@ export const UPDATE_PROFILE = "UPDATE_PROFILE";
 export const ACCOUNT_DELETED = "ACCOUNT_DELETED";
 export const UPDATE_PROFILES = "UPDATE_PROFILES";
 export const GET_GH_REPOS = "GET_GH_REPOS";
+
+export const GET_POSTS = "GET_POSTS";
+export const POST_ERROR = "POST_ERROR";
+export const UPDATE_LIKE = "UPDATE_LIKE";
