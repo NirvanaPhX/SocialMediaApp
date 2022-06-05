@@ -77,9 +77,9 @@ export const getAllProfiles = () => async (dispatch) => {
 // Get profile by ID
 export const getProfileByUserId = (user_id) => async (dispatch) => {
   try {
-    const resp = await api.get(`/profile/${user_id}`);
+    const resp = await api.get(`/profile/user/${user_id}`);
 
-    dispatch({ type: GET_PROFILES, payload: resp.data });
+    dispatch({ type: GET_PROFILE, payload: resp.data });
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
