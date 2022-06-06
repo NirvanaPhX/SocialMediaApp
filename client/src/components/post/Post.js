@@ -5,7 +5,7 @@ import { getPost } from "../../actions/post";
 import { Link, useParams } from "react-router-dom";
 import PostItem from "../posts/PostItem/PostItem";
 import Spinner from "../layout/Spinner/Spinner";
-import CommentForm from "./CommentForm/CommentForm";
+import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 
 const Post = ({ post: { post, loading }, getPost }) => {
